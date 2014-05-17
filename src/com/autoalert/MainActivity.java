@@ -1,6 +1,7 @@
 package com.autoalert;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
 
 import com.texa.odblogbt.BaseCommand;
@@ -135,7 +136,10 @@ public class MainActivity extends ActionBarActivity {
     private BluetoothDevice findDevice() {
     	BluetoothAdapter adapter = null;
     	
-    	for (BluetoothDevice device : adapter.getBondedDevices()) {
+    	adapter = BluetoothAdapter.getDefaultAdapter();
+    	Set<BluetoothDevice> devices = adapter.getBondedDevices();
+    	
+    	for (BluetoothDevice device : devices) {
     		if(device.getName() == "TO9DT000069") {
     			return device;
     		}
