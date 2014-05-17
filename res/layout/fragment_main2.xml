@@ -44,4 +44,14 @@
         android:onClick="ping"
         android:text="Ping" />
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_alignRight="@+id/button1"
+        android:onClick="vehicleStatus"
+        android:text="VehicleStatus" />
+
 </RelativeLayout>

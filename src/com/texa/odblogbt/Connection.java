@@ -77,14 +77,17 @@ public class Connection {
     }
     
     protected byte[] sendCommand(byte[] command) throws IOException {
-    	BluetoothSocket socket = null;
                 
         socket.getOutputStream().write(command);
         
         // read the header first to construct buffer
         byte[] header = new byte[4];
         socket.getInputStream().read(header);
-        byte length = header[3];
+        
+        if (header[0] != 2 || header[1] != 2) {
+        	return null;
+        }
+        int length = header[3] & 0xFF;
 
         byte[] buffer = new byte[length+2];
         socket.getInputStream().read(buffer);

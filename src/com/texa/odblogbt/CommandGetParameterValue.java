@@ -5,6 +5,10 @@ import com.autoalert.Hex;
 public class CommandGetParameterValue extends Command {
 
 	int parameterId;
+
+	public CommandGetParameterValue(int parameterId) {
+		this.parameterId = parameterId;  
+	}
 	
 	@Override
 	public byte getCommandId() {
