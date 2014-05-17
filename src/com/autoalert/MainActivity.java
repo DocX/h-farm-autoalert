@@ -3,6 +3,8 @@ package com.autoalert;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.texa.odblogbt.BaseCommand;
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -10,13 +12,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.os.Build;
+import android.provider.Telephony.TextBasedSmsColumns;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -68,74 +73,63 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 	
-	private int crc(byte[] bytes) {
-    	int crc = 0x00BD;          // initial value
-        int polynomial = 0x1021;   // 0001 0000 0010 0001  (0, 5, 12) 
+	private BluetoothSocket getSocket() {
+        BluetoothDevice device = null;
 
-        // byte[] testBytes = "123456789".getBytes("ASCII");
+        try {
+        	device = findDevice();
+        }
+        catch (Exception e)
+            {
+                ((TextView)findViewById(R.id.textView1)).setText( "cannot find device" );                	
+            }
 
-        for (int j = 2; j < bytes.length - 4; j++) {
-        	byte b = bytes[j];
-        	
-            for (int i = 0; i < 8; i++) {
-                boolean bit = ((b   >> (7-i) & 1) == 1);
-                boolean c15 = ((crc >> 15    & 1) == 1);
-                crc <<= 1;
-                if (c15 ^ bit) crc ^= polynomial;
-             }
+        BluetoothSocket socket = null;
+        try {
+            
+            socket = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
+
+        }
+        catch (Exception e)
+        {
+            ((TextView)findViewById(R.id.textView1)).setText( "error creating socket" );                	
         }
 
-        crc &= 0xffff;
+        return socket;
+	}
+    
+    public void getCarValue(View view) throws IOException {
+
+        BaseCommand comm = new BaseCommand(getSocket());
         
-        return crc;
+        View edit = findViewById(R.id.editText1);
+        String paramIdHex = ((EditText)edit).getText().toString();
+        int paramId = Integer.parseInt(paramIdHex, 16);
+        Log.d("ParamID", String.valueOf(paramId));
+        
+        try {
+	        byte[] value = comm.getParameterValue(paramId);
+	        
+            ((TextView)findViewById(R.id.textView1)).setText( Hex.bytesToHex(value));        
+        }
+        catch (Exception e)
+        {
+            ((TextView)findViewById(R.id.textView1)).setText( "error sending message" );                	
+        }
     }
     
-    public byte[] createPacket(byte repeatByte, byte cmdId, byte[] message) {
-    	byte deviceAddress = (byte) 0x92;
-    	byte[] packet = new byte[message.length + 2 /* sop */ + 1 /* dev addr */ 
-    	                  + 1 /* length */ + 1 /* cmd id */ 
-    	                  + 2 /* crc*/];
-    	packet[0] = 0x02;
-    	packet[1] = 0x02;
+    public void ping(View view) throws IOException {
+        BaseCommand comm = new BaseCommand(getSocket());
+                
+        try {
+	        byte value = comm.pingCommand();
+	        Log.d("Ping", String.valueOf(value) );
+        }
+        catch (Exception e)
+        {
+        	Log.d("Ping Error", e.toString());                	
+        }
     	
-    	/* dev address */
-    	packet[2] = deviceAddress;
-    	
-    	// length
-    	packet[3] = (byte) message.length;
-    	
-    	// msg
-    	for (int i = 0; i < message.length; i++) {
-			packet[i+4] = message[i];
-		}
-    	
-    	// crc
-    	int crc = crc(packet);
-    	
-    	// TODO little or big endian
-    	packet[packet.length - 2] = (byte)(crc >> 8);
-    	packet[packet.length - 1] = (byte)(crc);
-    	
-    	return packet;
-    }
-    
-    private byte[] pingCommand() {
-    	return createPacket((byte)0x00, (byte)0x00, new byte[] {0x00});
-    }
-    
-    public void connect(View view) throws IOException {
-        BluetoothSocket tmp = null;
-        
-        BluetoothDevice device = findDevice();
-        
-        tmp = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
-        
-        tmp.getOutputStream().write(pingCommand());
-        
-        byte[] buffer = new byte[8];
-        tmp.getInputStream().read(buffer);
-        
-        ((TextView)findViewById(R.id.textView1)).setText( Hex.bytesToHex(buffer));        
     }
 
     private BluetoothDevice findDevice() {

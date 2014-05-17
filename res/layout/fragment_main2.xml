@@ -8,20 +8,40 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.autoalert.MainActivity$PlaceholderFragment" >
 
-    <TextView
-        android:id="@+id/textView1"
+    <EditText
+        android:id="@+id/editText1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="17dp"
+        android:ems="10" />
 
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editText1"
+        android:layout_toRightOf="@+id/editText1"
+        android:onClick="getCarValue"
+        android:text="Refresh" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editText1"
+        android:layout_below="@+id/editText1"
+        android:layout_marginTop="36dp"
+        android:text="Value" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView1"
         android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="49dp"
-        android:onClick="connect"
-        android:text="Button" />
+        android:layout_marginTop="46dp"
+        android:onClick="ping"
+        android:text="Ping" />
 
 </RelativeLayout>
