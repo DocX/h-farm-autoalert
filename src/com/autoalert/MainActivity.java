@@ -74,32 +74,20 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 	
-	private BluetoothSocket getSocket() {
+	private BluetoothSocket getSocket() throws Exception {
         BluetoothDevice device = null;
-
-        try {
-        	device = findDevice();
-        }
-        catch (Exception e)
-            {
-                ((TextView)findViewById(R.id.textView1)).setText( "cannot find device" );                	
-            }
+        
+        device = findDevice();
+        
 
         BluetoothSocket socket = null;
-        try {
-            
-            socket = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
-
-        }
-        catch (Exception e)
-        {
-            ((TextView)findViewById(R.id.textView1)).setText( "error creating socket" );                	
-        }
+        socket = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
+ 
 
         return socket;
 	}
     
-    public void getCarValue(View view) throws IOException {
+    public void getCarValue(View view) throws Exception {
 
         BaseCommand comm = new BaseCommand(getSocket());
         
@@ -115,11 +103,11 @@ public class MainActivity extends ActionBarActivity {
         }
         catch (Exception e)
         {
-            ((TextView)findViewById(R.id.textView1)).setText( "error sending message" );                	
+            ((TextView)findViewById(R.id.textView1)).setText( "error sending message getCarValue" );                	
         }
     }
     
-    public void ping(View view) throws IOException {
+    public void ping(View view) throws Exception {
         BaseCommand comm = new BaseCommand(getSocket());
                 
         try {
@@ -133,19 +121,19 @@ public class MainActivity extends ActionBarActivity {
     	
     }
 
-    private BluetoothDevice findDevice() {
+    private BluetoothDevice findDevice() throws Exception {
     	BluetoothAdapter adapter = null;
     	
     	adapter = BluetoothAdapter.getDefaultAdapter();
     	Set<BluetoothDevice> devices = adapter.getBondedDevices();
     	
     	for (BluetoothDevice device : devices) {
-    		if(device.getName() == "TO9DT000069") {
+    		if(device.getName().equals("TO9DT000069")) {
     			return device;
     		}
 		}
     	
-    	return null;
+    	throw new Exception("Exception in findDevice");
 	}
 
 
