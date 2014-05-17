@@ -3,8 +3,11 @@ package com.texa.odblogbt;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.autoalert.Hex;
+
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.util.Log;
 
 public class Connection {
 
@@ -80,11 +83,15 @@ public class Connection {
     }
     
     protected byte[] sendCommand(byte[] command) throws IOException {
-                
+        
+    	Log.d("PacketOut", Hex.bytesToHex(command));
+    	
         socket.getOutputStream().write(command);
         
         byte[] controlSeq = new byte[2];
         socket.getInputStream().read(controlSeq);
+
+        Log.d("StartPacketIn", Hex.bytesToHex(controlSeq));
         
         if (controlSeq[0] != 2 || controlSeq[1] != 2) {
         	return null;
@@ -93,11 +100,14 @@ public class Connection {
         // read the header first to construct buffer
         byte[] header = new byte[2];
         socket.getInputStream().read(header);
+        Log.d("HeaderPacketIn", Hex.bytesToHex(header));
         
         int length = header[1] & 0xFF;
 
         byte[] buffer = new byte[length+2];
         socket.getInputStream().read(buffer);
+        Log.d("PacketIn", Hex.bytesToHex(buffer));
+        
         
         return buffer;
     }
