@@ -12,6 +12,11 @@ public abstract class Command {
 
 	public CommandResponse send(Connection connection) throws IOException {
 		byte[] response = connection.sendPacket((byte) 0x00, getCommandId(), getMessageBytes());
+		if (response == null) {
+			CommandResponse cr = new CommandResponse();
+			cr.put("Error", "bad packet");
+			return cr;
+		}
 		return constructResponse(response);
 	}
 

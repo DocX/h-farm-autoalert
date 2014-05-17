@@ -86,8 +86,14 @@ public class MainActivity extends ActionBarActivity {
         
 
         BluetoothSocket socket = null;
-        socket = device.createRfcommSocketToServiceRecord(UUID.randomUUID());
- 
+        //socket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
+        socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
+        try {
+        	socket.connect();
+        } catch(Exception e) {
+        	Log.d("Exception in getSocket", e.toString());
+        	throw e;
+        }
 
         return socket;
 	}
@@ -101,7 +107,7 @@ public class MainActivity extends ActionBarActivity {
         int paramId = Integer.parseInt(paramIdHex, 16);
         Log.d("ParamID", String.valueOf(paramId));
 
-        CommandGetParameterValue getParamCommand = new CommandGetParameterValue();
+        CommandGetParameterValue getParamCommand = new CommandGetParameterValue(paramId);
         
         sendCommand(comm, getParamCommand);
     }
