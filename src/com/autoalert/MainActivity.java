@@ -1,10 +1,15 @@
 package com.autoalert;
 
 import java.io.IOException;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import com.texa.odblogbt.BaseCommand;
+import com.texa.odblogbt.Command;
+import com.texa.odblogbt.CommandGetParameterValue;
+import com.texa.odblogbt.CommandPing;
+import com.texa.odblogbt.CommandResponse;
+import com.texa.odblogbt.Connection;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -89,36 +94,48 @@ public class MainActivity extends ActionBarActivity {
     
     public void getCarValue(View view) throws Exception {
 
-        BaseCommand comm = new BaseCommand(getSocket());
+        Connection comm = new Connection(getSocket());
         
         View edit = findViewById(R.id.editText1);
         String paramIdHex = ((EditText)edit).getText().toString();
         int paramId = Integer.parseInt(paramIdHex, 16);
         Log.d("ParamID", String.valueOf(paramId));
+
+        CommandGetParameterValue getParamCommand = new CommandGetParameterValue();
         
-        try {
-	        byte[] value = comm.getParameterValue(paramId);
+        sendCommand(comm, getParamCommand);
+    }
+
+	private void sendCommand(Connection comm,
+			Command getParamCommand) {
+		
+		try {
+	        CommandResponse response = getParamCommand.send(comm);
 	        
-            ((TextView)findViewById(R.id.textView1)).setText( Hex.bytesToHex(value));        
+	        showResponse(response);
         }
         catch (Exception e)
         {
             ((TextView)findViewById(R.id.textView1)).setText( "error sending message getCarValue" );                	
         }
+	}
+
+    protected void showResponse(CommandResponse response) {
+        TextView text = ((TextView)findViewById(R.id.textView1));
+        text.setText( "" );
+        for (Entry<String,String> value : response.entrySet()) {
+			text.append(value.getKey());
+			text.append(":");
+			text.append(value.getValue());
+        	text.append("\n");
+		}
+
     }
     
     public void ping(View view) throws Exception {
-        BaseCommand comm = new BaseCommand(getSocket());
+        Connection comm = new Connection(getSocket());
                 
-        try {
-	        byte value = comm.pingCommand();
-	        Log.d("Ping", String.valueOf(value) );
-        }
-        catch (Exception e)
-        {
-        	Log.d("Ping Error", e.toString());                	
-        }
-    	
+        sendCommand(comm, new CommandPing());
     }
 
     private BluetoothDevice findDevice() throws Exception {
