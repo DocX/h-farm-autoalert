@@ -6,11 +6,11 @@ import java.util.UUID;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 
-public class BaseCommand {
+public class Connection {
 
 	private BluetoothSocket socket;
 	
-	public BaseCommand(BluetoothSocket socket) {
+	public Connection(BluetoothSocket socket) {
 		// TODO Auto-generated constructor stub
 		this.socket = socket;
 	}
@@ -39,7 +39,7 @@ public class BaseCommand {
         return crc;
     }
     
-    public byte[] createPacket(byte repeatByte, byte cmdId, byte[] message) {
+    protected byte[] createPacket(byte repeatByte, byte cmdId, byte[] message) {
     	byte deviceAddress = (byte) 0x92;
     	byte[] packet = new byte[message.length + 2 /* sop */ + 1 /* dev addr */ 
     	                  + 1 /* length */ + 1 /* cmd id */ 
@@ -67,32 +67,10 @@ public class BaseCommand {
     	
     	return packet;
     }
-    
-    /**
-     * return command status of ping
-     * @return
-     * @throws IOException
-     */
-    public byte pingCommand() throws IOException {
-    	byte[] response = sendPacket((byte)0x00, (byte)0x00, new byte[] {0x00});
-    	
-    	return response[0];
-    	
-    }
-    
-    public byte[] getParameterValue(int parameterId) throws IOException {
-    	byte[] response = sendPacket((byte) 0x2F, (byte)0x00,
-    			new byte[] { 0x00, 0x00, (byte)(parameterId >> 8), (byte)( parameterId) });
-    	
-    	byte[] value = new byte[response.length - 7];
-    	for (int i = 0; i < response.length - 7; i++) {
-			value[i] = response[i+5];
-		}
-    	return value;
-    }
+   
     
     
-    protected byte[] sendPacket(byte repeatByte, byte cmdId, byte[] message) throws IOException {
+    public byte[] sendPacket(byte repeatByte, byte cmdId, byte[] message) throws IOException {
     	return sendCommand(
     			createPacket(repeatByte, cmdId, message)
     			);
@@ -106,9 +84,8 @@ public class BaseCommand {
         // read the header first to construct buffer
         byte[] header = new byte[4];
         socket.getInputStream().read(header);
-        
         byte length = header[3];
-        
+
         byte[] buffer = new byte[length+2];
         socket.getInputStream().read(buffer);
         
