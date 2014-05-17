@@ -143,6 +143,15 @@ public class MainActivity extends ActionBarActivity {
                 
         sendCommand(comm, new CommandPing());
     }
+    
+    
+    public void vehicleStatus(View view) throws Exception {
+        Connection comm = new Connection(getSocket());
+                
+        sendCommand(comm, new CommandPing());
+    }
+    
+    
 
     private BluetoothDevice findDevice() throws Exception {
     	BluetoothAdapter adapter = null;
