@@ -11,7 +11,7 @@ public class CommandPing extends Command {
 	@Override
 	public byte[] getMessageBytes() {
 		// TODO Auto-generated method stub
-		return new byte[] {0x00};
+		return new byte[0];
 	}
 
 	@Override

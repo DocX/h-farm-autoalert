@@ -51,11 +51,14 @@ public class Connection {
     	packet[2] = deviceAddress;
     	
     	// length
-    	packet[3] = (byte) message.length;
+    	packet[3] = (byte) (message.length + 2);
+    	
+    	packet[4] = (byte) cmdId;
+    	packet[5] = (byte) repeatByte;
     	
     	// msg
     	for (int i = 0; i < message.length; i++) {
-			packet[i+4] = message[i];
+			packet[i+6] = message[i];
 		}
     	
     	// crc

@@ -13,7 +13,7 @@ public class CommandGetVehicleStatus extends Command {
 	@Override
 	protected byte[] getMessageBytes() {
 		// TODO Auto-generated method stub
-		return new byte[] {0x00,0x01};
+		return new byte[] {0x01};
 	}
 
 	@Override

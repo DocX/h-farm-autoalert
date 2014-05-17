@@ -19,7 +19,7 @@ public class CommandGetParameterValue extends Command {
 	@Override
 	public byte[] getMessageBytes() {
 		// TODO Auto-generated method stub
-		return new byte[] { 0x00, 0x00, (byte)(parameterId >> 8), (byte)( parameterId) };
+		return new byte[] { 0x00, (byte)(parameterId >> 8), (byte)( parameterId) };
 	}
 	
 	@Override
