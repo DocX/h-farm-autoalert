@@ -80,14 +80,18 @@ public class Connection {
                 
         socket.getOutputStream().write(command);
         
-        // read the header first to construct buffer
-        byte[] header = new byte[4];
-        socket.getInputStream().read(header);
+        byte[] controlSeq = new byte[2];
+        socket.getInputStream().read(controlSeq);
         
-        if (header[0] != 2 || header[1] != 2) {
+        if (controlSeq[0] != 2 || controlSeq[1] != 2) {
         	return null;
         }
-        int length = header[3] & 0xFF;
+        
+        // read the header first to construct buffer
+        byte[] header = new byte[2];
+        socket.getInputStream().read(header);
+        
+        int length = header[1] & 0xFF;
 
         byte[] buffer = new byte[length+2];
         socket.getInputStream().read(buffer);

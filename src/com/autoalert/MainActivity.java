@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.texa.odblogbt.Command;
 import com.texa.odblogbt.CommandGetParameterValue;
+import com.texa.odblogbt.CommandGetVehicleStatus;
 import com.texa.odblogbt.CommandPing;
 import com.texa.odblogbt.CommandResponse;
 import com.texa.odblogbt.Connection;
@@ -148,7 +149,7 @@ public class MainActivity extends ActionBarActivity {
     public void vehicleStatus(View view) throws Exception {
         Connection comm = new Connection(getSocket());
                 
-        sendCommand(comm, new CommandPing());
+        sendCommand(comm, new CommandGetVehicleStatus());
     }
     
     
