@@ -13,6 +13,7 @@ import com.texa.odblogbt.CommandResponse;
 import com.texa.odblogbt.Connection;
 import com.texa.odblogbt.GetWorkModeCommand;
 import com.texa.odblogbt.SetWorkModeCommand;
+import com.texa.odblogbt.StartAcquisition;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -171,6 +172,22 @@ public class MainActivity extends ActionBarActivity {
         Connection comm = new Connection(getSocket());
                 
         sendCommand(comm, new SetWorkModeCommand(SetWorkModeCommand.CONNECTED));
+    }
+    public void setWorkModeTunning(View view) throws Exception {
+        Connection comm = new Connection(getSocket());
+                
+        sendCommand(comm, new SetWorkModeCommand(SetWorkModeCommand.TUNNING));
+    }
+    public void setWorkModeManual(View view) throws Exception {
+        Connection comm = new Connection(getSocket());
+                
+        sendCommand(comm, new SetWorkModeCommand(SetWorkModeCommand.MANUAL_SELF_STANDING));
+    }
+    
+    public void startAcquisition(View view) throws Exception {
+        Connection comm = new Connection(getSocket());
+                
+        sendCommand(comm, new StartAcquisition());
     }
     
         

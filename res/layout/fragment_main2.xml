@@ -72,6 +72,33 @@
         android:layout_below="@+id/button4"
         android:layout_marginTop="21dp"
         android:onClick="setWorkMode"
-        android:text="SetWorkMode" />
+        android:text="SetWorkMode CONNECTED" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/button5"
+        android:layout_toLeftOf="@+id/button5"
+        android:onClick="setWorkModeTunning"
+        android:text="SetWorkMode TUNNING" />
+
+    <Button
+        android:id="@+id/button7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button6"
+        android:layout_below="@+id/button6"
+        android:onClick="setWorkModeManual"
+        android:text="MANUAL" />
+
+    <Button
+        android:id="@+id/button8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button5"
+        android:layout_alignLeft="@+id/button6"
+        android:onClick="startAcquisition"
+        android:text="Start Acq" />
 
 </RelativeLayout>
