@@ -75,8 +75,8 @@ public class Connection {
     	int crc = crc(packet);
     	
     	// TODO little or big endian
-    	packet[packet.length - 2] = (byte)(crc >> 8);
-    	packet[packet.length - 1] = (byte)(crc);
+    	packet[packet.length - 1] = (byte)(crc >> 8);
+    	packet[packet.length - 2] = (byte)(crc);
     	
     	return packet;
     }
@@ -107,6 +107,10 @@ public class Connection {
         	secondByte = firstByte;
         	firstByte = (byte) inputStream.read();
         	count++;
+        	
+        	if (count > 10) {
+        		return null;
+        	}
         }
         
         Log.d("LoopCount", String.valueOf(count));

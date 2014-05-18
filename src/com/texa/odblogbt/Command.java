@@ -21,6 +21,11 @@ public abstract class Command {
 			cr.put("Error", "bad packet");
 			return cr;
 		}
+		if (response[1] != 0) {
+			CommandResponse cr = new CommandResponse();
+			cr.put("Error", "Command not succesful - " + String.valueOf(response[1]));
+			return cr;
+		}
 		return constructResponse(response);
 	}
 
