@@ -109,4 +109,13 @@
         android:layout_alignRight="@+id/button1"
         android:text="Repeat Byte" />
 
+    <Button
+        android:id="@+id/button9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_toLeftOf="@+id/checkBox1"
+        android:onClick="startCollectionInBackground"
+        android:text="StartCollection" />
+
 </RelativeLayout>
