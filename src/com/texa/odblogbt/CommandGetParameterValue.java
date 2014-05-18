@@ -33,15 +33,26 @@ public class CommandGetParameterValue extends Command {
 		// TODO Auto-generated method stub
 		CommandResponse res = new CommandResponse();
 		
-		byte[] valueBytes = new byte[response.length - 5];
-		for (int i = 0; i < valueBytes.length - 5; i++) {
+		byte[] valueBytes = new byte[response.length - 7];
+		for (int i = 0; i < response.length - 7; i++) {
 			valueBytes[i] = response[i+5];
 		}
 		
-		res.put("value", Hex.bytesToHex(valueBytes));
-		res.put("commandStatus", String.valueOf(response[0]));
-		res.put("mode", String.valueOf(response[1]));
-		res.put("parameterId", String.valueOf(response[2] * 256 + response[3]));
+		// 0 cmdid
+		// 1 status
+		// 2 mode - 00
+		// 3-4 param id
+		// 5-.. value
+		
+		res.put("valueHex", Hex.bytesToHex(valueBytes));
+		int valueNum = 0;
+		for (int i = 0; i < valueBytes.length; i++) {
+			valueNum += (valueBytes[i] & 0xFF) << (i * 8);
+		}
+		res.put("valueNum", String.valueOf(valueNum));
+		res.put("commandStatus", String.valueOf(response[1]));
+		res.put("mode", String.valueOf(response[2]));
+		res.put("parameterId", String.valueOf(response[3] * 256 + response[4]));
 		
 		return res;
 	}
