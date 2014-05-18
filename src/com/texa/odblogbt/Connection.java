@@ -43,17 +43,22 @@ public class Connection {
     }
     
     protected byte[] createPacket(byte repeatByte, byte cmdId, byte[] message) {
-    	byte deviceAddress = (byte) 0x92;
-    	byte[] packet = new byte[message.length + 2 /* sop */ + 1 /* dev addr */ 
-    	                  + 1 /* length */ + 1 /* cmd id */ 
-    	                  + 2 /* crc*/];
+    	byte[] packet = new byte[
+			message.length 
+			+ 2 /* sop */ 
+			+ 1 /* dev addr */ 
+			+ 1 /* length */ 
+			+ 1 /* cmd id */ 
+			+ 2 /* crc*/];
+    	
+    	/* packet start */
     	packet[0] = 0x02;
     	packet[1] = 0x02;
     	
     	/* dev address */
-    	packet[2] = deviceAddress;
+    	packet[2] = (byte)0x92;
     	
-    	// length
+    	//  message length (cmd id and rep byte is part of the message)
     	packet[3] = (byte) (message.length + 2);
     	
     	packet[4] = (byte) cmdId;
