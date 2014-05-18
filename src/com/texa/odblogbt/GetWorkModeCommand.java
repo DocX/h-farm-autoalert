@@ -1,15 +1,15 @@
 package com.texa.odblogbt;
 
-public class CommandPing extends Command {
+public class GetWorkModeCommand extends Command {
 
 	@Override
-	public byte getCommandId() {
+	protected byte getCommandId() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 0x11;
 	}
 
 	@Override
-	public byte[] getMessageBytes() {
+	protected byte[] getMessageBytes() {
 		// TODO Auto-generated method stub
 		return new byte[0];
 	}
@@ -17,10 +17,11 @@ public class CommandPing extends Command {
 	@Override
 	protected CommandResponse constructResponse(byte[] response) {
 		// TODO Auto-generated method stub
-		CommandResponse cmdResponse =  new CommandResponse();
-		cmdResponse.put("value", String.valueOf(response[1]));
+		CommandResponse r = new CommandResponse();
 		
-		return cmdResponse;
+		r.put("WorkMode", String.valueOf(response[2]));
+		
+		return r;
 	}
 
 }

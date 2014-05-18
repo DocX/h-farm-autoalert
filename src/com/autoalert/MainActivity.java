@@ -11,6 +11,8 @@ import com.texa.odblogbt.CommandGetVehicleStatus;
 import com.texa.odblogbt.CommandPing;
 import com.texa.odblogbt.CommandResponse;
 import com.texa.odblogbt.Connection;
+import com.texa.odblogbt.GetWorkModeCommand;
+import com.texa.odblogbt.SetWorkModeCommand;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -158,7 +160,20 @@ public class MainActivity extends ActionBarActivity {
         sendCommand(comm, new CommandGetVehicleStatus());
     }
     
+
+    public void getWorkMode(View view) throws Exception {
+        Connection comm = new Connection(getSocket());
+                
+        sendCommand(comm, new GetWorkModeCommand());
+    }
     
+    public void setWorkMode(View view) throws Exception {
+        Connection comm = new Connection(getSocket());
+                
+        sendCommand(comm, new SetWorkModeCommand(SetWorkModeCommand.CONNECTED));
+    }
+    
+        
 
     private BluetoothDevice findDevice() throws Exception {
     	BluetoothAdapter adapter = null;

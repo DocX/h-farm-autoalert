@@ -25,7 +25,7 @@ public class CommandGetParameterValue extends Command {
 	@Override
 	protected int extraLength() {
 		// TODO Auto-generated method stub
-		return 5;
+		return 0;
 	}
 	
 	@Override
