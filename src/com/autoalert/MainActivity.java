@@ -32,6 +32,8 @@ import android.provider.Telephony.TextBasedSmsColumns;
 
 public class MainActivity extends ActionBarActivity {
 
+    private BluetoothSocket socket = null;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,21 +83,25 @@ public class MainActivity extends ActionBarActivity {
 	}
 	
 	private BluetoothSocket getSocket() throws Exception {
-        BluetoothDevice device = null;
-        
-        device = findDevice();
-        
+		if (socket == null) {
+			
+			BluetoothDevice device = null;
+	        
+	        device = findDevice();
+	        
 
-        BluetoothSocket socket = null;
-        //socket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-        socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
-        try {
-        	socket.connect();
-        } catch(Exception e) {
-        	Log.d("Exception in getSocket", e.toString());
-        	throw e;
-        }
-
+			//socket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
+		    socket = device.createRfcommSocketToServiceRecord(UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"));
+		    	
+        
+	        try {
+	        	socket.connect();
+	        } catch(Exception e) {
+	        	Log.d("Exception in getSocket", e.toString());
+	        	throw e;
+	        }
+		}
+		
         return socket;
 	}
     

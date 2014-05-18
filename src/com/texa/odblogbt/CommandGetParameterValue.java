@@ -23,6 +23,12 @@ public class CommandGetParameterValue extends Command {
 	}
 	
 	@Override
+	protected int extraLength() {
+		// TODO Auto-generated method stub
+		return 5;
+	}
+	
+	@Override
 	protected CommandResponse constructResponse(byte[] response) {
 		// TODO Auto-generated method stub
 		CommandResponse res = new CommandResponse();
