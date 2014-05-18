@@ -83,9 +83,9 @@ public class Connection {
    
     
     
-    public byte[] sendPacket(byte repeatByte, byte cmdId, byte[] message, int extraLength) throws IOException {
+    public byte[] sendPacket(byte repeatByte, byte cmdId, byte[] message, int extraLength, boolean repeatedCommand) throws IOException {
     	return sendCommand(
-    			createPacket(repeatByte, cmdId, message), 
+    			createPacket((byte)(repeatedCommand ? 0xFF : 0x00), cmdId, message), 
     			extraLength
     			);
     }

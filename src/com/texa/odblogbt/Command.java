@@ -14,8 +14,8 @@ public abstract class Command {
 		return 0;
 	}
 
-	public CommandResponse send(Connection connection) throws IOException {
-		byte[] response = connection.sendPacket((byte) 0x00, getCommandId(), getMessageBytes(), extraLength());
+	public CommandResponse send(Connection connection, boolean repeatedCommand) throws IOException {
+		byte[] response = connection.sendPacket((byte) 0x00, getCommandId(), getMessageBytes(), extraLength(), repeatedCommand);
 		if (response == null) {
 			CommandResponse cr = new CommandResponse();
 			cr.put("Error", "bad packet");

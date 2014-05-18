@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.os.Build;
@@ -110,29 +111,28 @@ public class MainActivity extends ActionBarActivity {
     
     public void getCarValue(View view) throws Exception {
 
-        Connection comm = new Connection(getSocket());
-        
         View edit = findViewById(R.id.editText1);
         String paramIdHex = ((EditText)edit).getText().toString();
         int paramId = Integer.parseInt(paramIdHex, 16);
         Log.d("ParamID", String.valueOf(paramId));
 
-        CommandGetParameterValue getParamCommand = new CommandGetParameterValue(paramId);
-        
-        sendCommand(comm, getParamCommand);
+        sendCommand(new CommandGetParameterValue(paramId));
     }
 
-	private void sendCommand(Connection comm,
-			Command getParamCommand) {
+	private void sendCommand(Command getParamCommand) {
 		
 		try {
-	        CommandResponse response = getParamCommand.send(comm);
+			Connection comm = new Connection(getSocket());
+			
+	        CommandResponse response = getParamCommand.send(comm, 
+	        		((CheckBox)findViewById(R.id.checkBox1)).isChecked()
+	        		);
 	        
 	        showResponse(response);
         }
         catch (Exception e)
         {
-            ((TextView)findViewById(R.id.textView1)).setText( "error sending message getCarValue" );                	
+            ((TextView)findViewById(R.id.textView1)).setText( "ERROR " + e.toString() );                	
         }
 	}
 
@@ -149,45 +149,31 @@ public class MainActivity extends ActionBarActivity {
     }
     
     public void ping(View view) throws Exception {
-        Connection comm = new Connection(getSocket());
-                
-        sendCommand(comm, new CommandPing());
+        sendCommand(new CommandPing());
     }
     
     
     public void vehicleStatus(View view) throws Exception {
-        Connection comm = new Connection(getSocket());
-                
-        sendCommand(comm, new CommandGetVehicleStatus());
+        sendCommand(new CommandGetVehicleStatus());
     }
     
 
     public void getWorkMode(View view) throws Exception {
-        Connection comm = new Connection(getSocket());
-                
-        sendCommand(comm, new GetWorkModeCommand());
+        sendCommand( new GetWorkModeCommand());
     }
     
     public void setWorkMode(View view) throws Exception {
-        Connection comm = new Connection(getSocket());
-                
-        sendCommand(comm, new SetWorkModeCommand(SetWorkModeCommand.CONNECTED));
+        sendCommand( new SetWorkModeCommand(SetWorkModeCommand.CONNECTED));
     }
     public void setWorkModeTunning(View view) throws Exception {
-        Connection comm = new Connection(getSocket());
-                
-        sendCommand(comm, new SetWorkModeCommand(SetWorkModeCommand.TUNNING));
+        sendCommand( new SetWorkModeCommand(SetWorkModeCommand.TUNNING));
     }
     public void setWorkModeManual(View view) throws Exception {
-        Connection comm = new Connection(getSocket());
-                
-        sendCommand(comm, new SetWorkModeCommand(SetWorkModeCommand.MANUAL_SELF_STANDING));
+        sendCommand(new SetWorkModeCommand(SetWorkModeCommand.MANUAL_SELF_STANDING));
     }
     
     public void startAcquisition(View view) throws Exception {
-        Connection comm = new Connection(getSocket());
-                
-        sendCommand(comm, new StartAcquisition());
+        sendCommand( new StartAcquisition());
     }
     
         
